@@ -84,7 +84,6 @@ public class LoginController {
     @DeleteMapping("/logout")
     public Result logout(HttpServletRequest request){
         String token = request.getHeader("Token");
-        CurrentUser currentUser = tokenUtils.getCurrentUser(token);
         Boolean delete = redisTemplate.delete(token);
         if (delete) {
             return Result.ok("注销成功");

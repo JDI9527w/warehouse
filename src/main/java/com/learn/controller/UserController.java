@@ -1,6 +1,5 @@
 package com.learn.controller;
 
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.learn.DTO.CurrentUser;
@@ -12,11 +11,9 @@ import com.learn.util.TokenUtils;
 import com.learn.util.WarehouseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class UserController {
@@ -31,13 +28,8 @@ public class UserController {
     @GetMapping("/user/auth-list")
     public Result listUserAuth(@RequestHeader(WarehouseConstants.HEADER_TOKEN_NAME) String token) {
         CurrentUser currentUser = tokenUtils.getCurrentUser(token);
-        String jsonString = redisTemplate.opsForValue().get("authTree:" + currentUser.getUserId());
-        if (StringUtils.isEmpty(jsonString)) {
-            List<Auth> auths = userService.listUserAuthById(currentUser.getUserId());
-            jsonString = JSON.toJSONString(auths);
-            redisTemplate.opsForValue().set("authTree:" + currentUser.getUserId(), jsonString, 60 * 60 * 8, TimeUnit.SECONDS);
-        }
-        return Result.ok(jsonString);
+        List<Auth> auths = userService.listUserAuthById(currentUser.getUserId());
+        return Result.ok(auths);
     }
 
     @GetMapping("/user/user-list")
