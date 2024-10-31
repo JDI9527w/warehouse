@@ -33,22 +33,33 @@ public class UserController {
     }
 
     @GetMapping("/user/user-list")
-    public Result listUser(@RequestBody User user,
-                           @RequestParam("pageSize") Integer pageSize,
-                           @RequestParam("pageNum") Integer pageNum) {
+    public Result listUser(@RequestBody(required = false) User user,
+                           @RequestParam Integer pageSize,
+                           @RequestParam Integer pageNum) {
         QueryWrapper<User> queryWrapper = new QueryWrapper();
-        if (user.getUserCode() != null && user.getUserCode() != "") {
-            queryWrapper.eq("user_code", user.getUserCode());
-        }
-        if (user.getUserType() != null) {
-            queryWrapper.eq("user_type", user.getUserType());
-        }
-        if (user.getUserState() != null) {
-            queryWrapper.eq("user_state", user.getUserState());
+        if (user != null){
+            if (user.getUserCode() != null && !user.getUserCode().equals("")) {
+                queryWrapper.eq("user_code", user.getUserCode());
+            }
+            if (user.getUserType() != null) {
+                queryWrapper.eq("user_type", user.getUserType());
+            }
+            if (user.getUserState() != null) {
+                queryWrapper.eq("user_state", user.getUserState());
+            }
         }
         Page<User> page = new Page<>(pageNum, pageSize);
-        Page<User> pageList = userService.page(page, queryWrapper);
+        Page<User> pageList = userService.page(page);
         return Result.ok(pageList);
+    }
+
+    @PostMapping("user/addUser")
+    public Result addUser(@RequestBody User user){
+        boolean flag = userService.save(user);
+        if (flag){
+            return Result.ok("操作成功");
+        }
+        return Result.err(Result.CODE_ERR_BUSINESS, "操作失败");
     }
 
 }

@@ -2,8 +2,7 @@ package com.learn.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.learn.entity.Auth;
 import com.learn.entity.User;
 import com.learn.mapper.UserMapper;
@@ -14,15 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -73,50 +69,5 @@ public class UserServiceImpl implements UserService {
         }
         auths = auths.stream().filter(auth -> auth.getParentId() == 0).collect(Collectors.toList());
         return auths;
-    }
-
-    @Override
-    public boolean saveBatch(Collection<User> entityList, int batchSize) {
-        return false;
-    }
-
-    @Override
-    public boolean saveOrUpdateBatch(Collection<User> entityList, int batchSize) {
-        return false;
-    }
-
-    @Override
-    public boolean updateBatchById(Collection<User> entityList, int batchSize) {
-        return false;
-    }
-
-    @Override
-    public boolean saveOrUpdate(User entity) {
-        return false;
-    }
-
-    @Override
-    public User getOne(Wrapper<User> queryWrapper, boolean throwEx) {
-        return null;
-    }
-
-    @Override
-    public Map<String, Object> getMap(Wrapper<User> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    public <V> V getObj(Wrapper<User> queryWrapper, Function<? super Object, V> mapper) {
-        return null;
-    }
-
-    @Override
-    public BaseMapper<User> getBaseMapper() {
-        return null;
-    }
-
-    @Override
-    public Class<User> getEntityClass() {
-        return null;
     }
 }
