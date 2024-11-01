@@ -2,7 +2,6 @@ package com.learn.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +20,6 @@ import java.util.Date;
 public class Role {
 
     //角色id
-    @TableId
     private Integer roleId;
     //角色名称
     private String roleName;

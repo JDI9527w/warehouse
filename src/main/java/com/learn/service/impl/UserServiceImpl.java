@@ -2,8 +2,11 @@ package com.learn.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.learn.DTO.AssignRoleDto;
 import com.learn.entity.Auth;
+import com.learn.entity.Role;
 import com.learn.entity.User;
 import com.learn.mapper.UserMapper;
 import com.learn.service.UserService;
@@ -47,6 +50,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         }
         auths = JSONArray.parseArray(jsonString, Auth.class);
         return auths;
+    }
+
+    @Override
+    public boolean updateById(User user, QueryWrapper<User> queryWrapper) {
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.eq("user_name",user.getUserName());
+        User exist = baseMapper.selectOne(qw);
+        if (exist != null){
+            return false;
+        }
+        return baseMapper.update(user, queryWrapper) > 0;
+    }
+
+    @Override
+    public List<Role> listUserRole(Integer userId) {
+        return baseMapper.listUserRole(userId);
+    }
+
+    @Override
+    public boolean assignRoleByUserId(AssignRoleDto assignRoleDto) {
+        Integer userId = assignRoleDto.getUserId();
+        List<String> roleCheckList = assignRoleDto.getRoleCheckList();
+        // TODO if can't do change web ,cache roleList to redis.
+        return false;
     }
 
     public List<Auth> treeAuth(List<Auth> auths) {
