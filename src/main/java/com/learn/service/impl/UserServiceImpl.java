@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.learn.DTO.AssignRoleDto;
 import com.learn.entity.Auth;
 import com.learn.entity.Role;
 import com.learn.entity.User;
@@ -68,14 +67,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         return baseMapper.listUserRole(userId);
     }
 
-    @Override
-    public boolean assignRoleByUserId(AssignRoleDto assignRoleDto) {
-        Integer userId = assignRoleDto.getUserId();
-        List<String> roleCheckList = assignRoleDto.getRoleCheckList();
-        // TODO if can't do change web ,cache roleList to redis.
-        return false;
-    }
-
+    /**
+     * 树化权限
+     * @param auths
+     * @return
+     */
     public List<Auth> treeAuth(List<Auth> auths) {
         List<Integer> parentIdList = new ArrayList<>();
         for (Auth auth : auths) {
@@ -85,11 +81,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
                     continue;
                 }
                 parentIdList.add(parentId);
-                List<Auth> children = auths.stream().filter(a -> a.getParentId() == parentId).collect(Collectors.toList());
                 List<Auth> father = auths.stream().filter(a -> a.getAuthId() == parentId).collect(Collectors.toList());
                 if (father.isEmpty()) {
                     continue;
                 }
+                List<Auth> children = auths.stream().filter(a -> a.getParentId() == parentId).collect(Collectors.toList());
                 Auth fatherAuth = father.get(0);
                 fatherAuth.setChildAuth(children);
             }

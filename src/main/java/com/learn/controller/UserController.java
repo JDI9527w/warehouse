@@ -1,6 +1,7 @@
 package com.learn.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.learn.DTO.AssignRoleDto;
 import com.learn.DTO.CurrentUser;
@@ -8,7 +9,9 @@ import com.learn.DTO.Result;
 import com.learn.entity.Auth;
 import com.learn.entity.Role;
 import com.learn.entity.User;
+import com.learn.service.UserRoleService;
 import com.learn.service.UserService;
+import com.learn.util.DigestUtil;
 import com.learn.util.TokenUtils;
 import com.learn.util.WarehouseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +25,17 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
     private TokenUtils tokenUtils;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-
+    /**
+     *获取用户权限
+     * @param token
+     * @return
+     */
     @GetMapping("/user/auth-list")
     public Result listUserAuth(@RequestHeader(WarehouseConstants.HEADER_TOKEN_NAME) String token) {
         CurrentUser currentUser = tokenUtils.getCurrentUser(token);
@@ -34,6 +43,13 @@ public class UserController {
         return Result.ok(auths);
     }
 
+    /**
+     * 获取用户列表
+     * @param user
+     * @param pageSize
+     * @param pageNum
+     * @return
+     */
     @GetMapping("/user/user-list")
     public Result listUser(@RequestBody(required = false) User user,
                            @RequestParam Integer pageSize,
@@ -55,6 +71,11 @@ public class UserController {
         return Result.ok(pageList);
     }
 
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
     @PostMapping("user/addUser")
     public Result addUser(@RequestBody User user) {
 
@@ -65,6 +86,11 @@ public class UserController {
         return Result.err(Result.CODE_ERR_BUSINESS, "操作失败");
     }
 
+    /**
+     * 修改用户
+     * @param user
+     * @return
+     */
     @PutMapping("/user/updateUser")
     public Result updateUser(@RequestBody User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -76,6 +102,11 @@ public class UserController {
         return Result.err(Result.CODE_ERR_BUSINESS, "修改失败,昵称重复");
     }
 
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
     @DeleteMapping("/user/deleteUser/{userId}")
     public Result deleteUserById(@PathVariable Integer userId) {
         boolean removeFlag = userService.remove(new QueryWrapper<User>().eq("user_id", userId));
@@ -85,6 +116,11 @@ public class UserController {
         return Result.err(Result.CODE_ERR_BUSINESS, "删除失败");
     }
 
+    /**
+     * 更改用户状态
+     * @param user
+     * @return
+     */
     @PutMapping("/user/updateState")
     public Result updateState(@RequestBody User user) {
         boolean updateFlag = userService.updateById(user);
@@ -94,16 +130,46 @@ public class UserController {
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
     }
 
+    /**
+     * 查询用户角色
+     * @param userId
+     * @return
+     */
     @GetMapping("/user/user-role-list/{userId}")
     public Result userRoleList(@PathVariable Integer userId) {
         List<Role> roles = userService.listUserRole(userId);
         return Result.ok(roles);
     }
 
+    /**
+     * 授权角色
+     * @param assignRoleDto
+     * @return
+     */
     @PutMapping("/user/assignRole")
     public Result assignRoleByUserId(@RequestBody AssignRoleDto assignRoleDto) {
-        boolean b = userService.assignRoleByUserId(assignRoleDto);
-        // TODO if can't do change web ,cache roleList to redis.
-        return null;
+        boolean flag = userRoleService.assignRoleByUserId(assignRoleDto);
+        if (flag) {
+            return Result.ok("操作成功");
+        }
+        return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    /**
+     * 重置密码
+     * @param userId
+     * @return
+     */
+    @PutMapping("/user/updatePwd/{userId}")
+    public Result resetPwdById(@PathVariable Integer userId) {
+        UpdateWrapper<User> uw = new UpdateWrapper<>();
+        uw.eq("user_id", userId);
+        String parsePwd = DigestUtil.hmacSign("123456");
+        uw.set("user_pwd", parsePwd);
+        boolean update = userService.update(uw);
+        if (update) {
+            return Result.ok("操作成功");
+        }
+        return Result.err(Result.CODE_ERR_SYS, "操作失败");
     }
 }
