@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.mapper.AuthMapper">
+    <select id="listUserAuthByUserId" resultType="com.learn.entity.Auth">
+        select
+            ai.auth_id,
+            parent_id,
+            auth_name,
+            auth_desc,
+            auth_grade,
+            auth_type,
+            auth_url,
+            auth_code,
+            auth_order,
+            auth_state
+        from auth_info ai
+        left join role_auth ra on ai.auth_id = ra.auth_id
+        left join user_role ur on ur.role_id = ra.role_id
+        where ur.user_id = #{userId}
+    </select>
+    <select id="listUserAuthIdByUserId" resultType="java.lang.String">
+        select
+            ai.auth_id
+        from auth_info ai
+                 left join role_auth ra on ai.auth_id = ra.auth_id
+                 left join user_role ur on ur.role_id = ra.role_id
+        where ur.user_id = #{userId} and auth_state != 0
+    </select>
+</mapper>

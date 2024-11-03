@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("user_role")
-public class UserRole {
+public class UserRole implements Serializable {
     @TableId
     private Integer userRoleId;
     private Integer roleId;

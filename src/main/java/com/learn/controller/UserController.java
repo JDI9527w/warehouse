@@ -3,12 +3,14 @@ package com.learn.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.learn.DTO.AssignAuthDTO;
 import com.learn.DTO.AssignRoleDto;
 import com.learn.DTO.CurrentUser;
 import com.learn.DTO.Result;
 import com.learn.entity.Auth;
 import com.learn.entity.Role;
 import com.learn.entity.User;
+import com.learn.service.AuthService;
 import com.learn.service.UserRoleService;
 import com.learn.service.UserService;
 import com.learn.util.DigestUtil;
@@ -27,24 +29,28 @@ public class UserController {
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
+    private AuthService authService;
+    @Autowired
     private TokenUtils tokenUtils;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     /**
-     *获取用户权限
+     * 获取用户权限
+     *
      * @param token
      * @return
      */
     @GetMapping("/user/auth-list")
     public Result listUserAuth(@RequestHeader(WarehouseConstants.HEADER_TOKEN_NAME) String token) {
         CurrentUser currentUser = tokenUtils.getCurrentUser(token);
-        List<Auth> auths = userService.listUserAuthById(currentUser.getUserId());
+        List<Auth> auths = authService.listUserAuthById(currentUser.getUserId());
         return Result.ok(auths);
     }
 
     /**
      * 获取用户列表
+     *
      * @param user
      * @param pageSize
      * @param pageNum
@@ -73,12 +79,14 @@ public class UserController {
 
     /**
      * 添加用户
+     *
      * @param user
      * @return
      */
     @PostMapping("user/addUser")
     public Result addUser(@RequestBody User user) {
-
+        String parsePwd = DigestUtil.hmacSign(user.getUserPwd());
+        user.setUserPwd(parsePwd);
         boolean flag = userService.save(user);
         if (flag) {
             return Result.ok("操作成功");
@@ -88,6 +96,7 @@ public class UserController {
 
     /**
      * 修改用户
+     *
      * @param user
      * @return
      */
@@ -104,6 +113,7 @@ public class UserController {
 
     /**
      * 删除用户
+     *
      * @param userId
      * @return
      */
@@ -118,6 +128,7 @@ public class UserController {
 
     /**
      * 更改用户状态
+     *
      * @param user
      * @return
      */
@@ -132,6 +143,7 @@ public class UserController {
 
     /**
      * 查询用户角色
+     *
      * @param userId
      * @return
      */
@@ -143,6 +155,7 @@ public class UserController {
 
     /**
      * 授权角色
+     *
      * @param assignRoleDto
      * @return
      */
@@ -157,6 +170,7 @@ public class UserController {
 
     /**
      * 重置密码
+     *
      * @param userId
      * @return
      */
@@ -171,5 +185,26 @@ public class UserController {
             return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    /**
+     * 获取用户权限id列表。
+     * @param userId
+     * @return
+     */
+    @GetMapping("/user/user-auth")
+    public Result userAuth(Integer userId) {
+        List<String> userAuthIdList = authService.listUserAuthIdByUserId(userId);
+        return Result.ok(userAuthIdList);
+    }
+
+    // TODO 测试
+    @PutMapping("/user/auth-grant")
+    public Result authGrant(AssignAuthDTO assignAuthDTO){
+        boolean flag = authService.assignAuth(assignAuthDTO);
+        if (flag) {
+            return Result.ok();
+        }
+        return  Result.err(Result.CODE_ERR_SYS,"操作失败");
     }
 }

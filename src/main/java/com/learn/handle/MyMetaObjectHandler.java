@@ -41,8 +41,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("公共字段自动填充[update]...");
         try {
             CurrentUser currentUser = tokenUser();
-            this.strictInsertFill(metaObject, "updateBy", String.class, String.valueOf(currentUser.getUserId())); // 创建人
-            this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now()); // 创建时间
+            // 修改人
+            this.strictUpdateFill(metaObject, "updateBy", String.class, String.valueOf(currentUser.getUserId()));
+            // 修改时间
+            this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         } catch (Exception e) {
             throw new ServiceException("自动注入异常 => " + e.getMessage());
         }

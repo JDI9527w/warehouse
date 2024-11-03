@@ -1,8 +1,12 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +16,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Auth {
+@TableName("auth_info")
+public class Auth implements Serializable {
 
 	private int authId;//权限(菜单)id
 
@@ -43,5 +48,6 @@ public class Auth {
 	private Date updateTime;//权限(菜单)的修改时间
 
 	//追加的List<Auth>集合属性 -- 用于存储当前权限(菜单)的子级权限(菜单)
+	@TableField(exist = false)
 	private List<Auth> childAuth;
 }

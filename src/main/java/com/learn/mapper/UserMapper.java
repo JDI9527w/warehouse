@@ -1,7 +1,6 @@
 package com.learn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.learn.entity.Auth;
 import com.learn.entity.Role;
 import com.learn.entity.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,8 +13,6 @@ public interface UserMapper extends BaseMapper<User> {
     User getUserByCode(String userCode);
 
     List<User> listUsers(User user);
-
-    List<Auth> listUserAuthById(int userId);
 
     List<Role> listUserRole(Integer userId);
 }
