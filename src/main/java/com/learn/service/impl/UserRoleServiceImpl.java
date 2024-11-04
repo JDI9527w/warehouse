@@ -50,6 +50,18 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     /**
+     * 查找绑定了指定角色id的数据
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<UserRole> listUserRoleByRoleId(Integer roleId) {
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        return baseMapper.selectList(queryWrapper);
+    }
+
+    /**
      * 通过RoleName和userId,返回userRole列表
      * @param roleCheckList
      * @param userId

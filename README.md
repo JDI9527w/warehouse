@@ -11,4 +11,8 @@
     这种联合索引的组合必须是唯一的.
     如果想要插入时跳过重复的项,可以使用 INSERT IGNORE
     MySQL:使用show index from tableName 查询表的索引.
+三、Myabtis的使用
+
+    使用自带的UpdateById方法时，需要在实体类中使用@TableId标注出主键Id，
+    否则会报：Invalid bound statement (not found) 错误。
 

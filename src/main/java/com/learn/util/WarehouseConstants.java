@@ -16,6 +16,10 @@ public interface WarehouseConstants {
 
     // 逻辑删除
     public Integer LOGIC_DELETE_VALUE = 1;
+    // 禁用
+    public Integer STATE_DISABLED = 0;
+    // 启用
+    public Integer STATE_ENABLED = 1;
 
     //传递token的请求头名称
     public String HEADER_TOKEN_NAME = "Token";

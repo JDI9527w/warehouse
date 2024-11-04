@@ -86,6 +86,8 @@ public class UserController {
     @PostMapping("user/addUser")
     public Result addUser(@RequestBody User user) {
         String parsePwd = DigestUtil.hmacSign(user.getUserPwd());
+        user.setUserState(WarehouseConstants.USER_STATE_NOT_PASS);
+        user.setIsDelete(WarehouseConstants.LOGIC_NOT_DELETE_VALUE);
         user.setUserPwd(parsePwd);
         boolean flag = userService.save(user);
         if (flag) {
@@ -194,16 +196,16 @@ public class UserController {
      */
     @GetMapping("/user/user-auth")
     public Result userAuth(Integer userId) {
-        List<String> userAuthIdList = authService.listUserAuthIdByUserId(userId);
+        List<Integer> userAuthIdList = authService.listUserAuthIdByUserId(userId);
         return Result.ok(userAuthIdList);
     }
 
     // TODO 测试
     @PutMapping("/user/auth-grant")
-    public Result authGrant(AssignAuthDTO assignAuthDTO){
+    public Result authGrant(@RequestBody AssignAuthDTO assignAuthDTO){
         boolean flag = authService.assignAuth(assignAuthDTO);
         if (flag) {
-            return Result.ok();
+            return Result.ok("操作成功");
         }
         return  Result.err(Result.CODE_ERR_SYS,"操作失败");
     }

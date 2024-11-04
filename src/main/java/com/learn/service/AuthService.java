@@ -11,7 +11,7 @@ public interface AuthService extends IService<Auth> {
 
     List<Auth> listAuthTree();
 
-    List<String> listUserAuthIdByUserId(Integer userId);
+    List<Integer> listUserAuthIdByUserId(Integer userId);
 
     boolean assignAuth(AssignAuthDTO assignAuthDTO);
 }

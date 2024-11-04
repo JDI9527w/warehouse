@@ -6,7 +6,6 @@ import com.learn.DTO.CurrentUser;
 import com.learn.DTO.RequestContext;
 import com.learn.exception.ServiceException;
 import com.learn.util.TokenUtils;
-import com.learn.util.WarehouseConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("公共字段自动填充[insert]...");
         try {
             CurrentUser currentUser = tokenUser();
-            this.strictInsertFill(metaObject, "userState", Integer.class, WarehouseConstants.USER_STATE_NOT_PASS);
-            this.strictInsertFill(metaObject, "isDelete", Integer.class, WarehouseConstants.LOGIC_NOT_DELETE_VALUE);
             this.strictInsertFill(metaObject, "createBy", String.class, String.valueOf(currentUser.getUserId())); // 创建人
             this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 创建时间
             log.info("公共字段自动填充[insert]...param: {}", metaObject);

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.learn.mapper.RoleAuthMapper">
+    <delete id="delByUserId">
+    DELETE ra
+    FROM role_auth ra
+        INNER JOIN user_role ur ON ra.role_id = ur.role_id
+        INNER JOIN auth_info ai ON ra.auth_id = ai.auth_id
+    WHERE ur.user_id = #{userId}
+    AND ai.auth_type != 3;
+    </delete>
 </mapper>

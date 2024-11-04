@@ -16,9 +16,10 @@
         from auth_info ai
         left join role_auth ra on ai.auth_id = ra.auth_id
         left join user_role ur on ur.role_id = ra.role_id
-        where ur.user_id = #{userId}
+        left join role r on r.role_id = ur.role_id
+        where ur.user_id = #{userId} and r.role_state = 1
     </select>
-    <select id="listUserAuthIdByUserId" resultType="java.lang.String">
+    <select id="listUserAuthIdByUserId" resultType="java.lang.Integer">
         select
             ai.auth_id
         from auth_info ai

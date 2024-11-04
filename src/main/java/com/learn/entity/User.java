@@ -19,10 +19,8 @@ public class User implements Serializable {
     private String userName;
     private String userPwd;
     private Integer userType;
-    @TableField(fill = FieldFill.INSERT)
     private Integer userState;
     @TableLogic
-    @TableField(fill = FieldFill.INSERT)
     private Integer isDelete;
     @TableField(fill = FieldFill.INSERT)
     private String createBy;

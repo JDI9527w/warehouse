@@ -8,4 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoleAuthServiceImpl extends ServiceImpl<RoleAuthMapper, RoleAuth> implements RoleAuthService {
+    @Override
+    public boolean delByUserId(Integer userId) {
+        return baseMapper.delByUserId(userId);
+    }
 }

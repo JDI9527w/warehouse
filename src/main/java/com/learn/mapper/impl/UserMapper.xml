@@ -25,6 +25,6 @@
         select r.role_id, role_name, role_desc, role_code, role_state
         from role r
                  left join user_role ur on ur.role_id = r.role_id
-        where ur.user_id = #{userId}
+        where ur.user_id = #{userId} and r.role_state = 1
     </select>
 </mapper>

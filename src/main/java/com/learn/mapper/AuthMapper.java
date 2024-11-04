@@ -10,6 +10,5 @@ import java.util.List;
 public interface AuthMapper extends BaseMapper<Auth> {
     List<Auth> listUserAuthByUserId(int userId);
 
-    List<String> listUserAuthIdByUserId(int userId);
-
+    List<Integer> listUserAuthIdByUserId(int userId);
 }

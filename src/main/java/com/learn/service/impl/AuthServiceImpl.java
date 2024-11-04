@@ -17,6 +17,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -59,17 +60,28 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     }
 
     @Override
-    public List<String> listUserAuthIdByUserId(Integer userId) {
+    public List<Integer> listUserAuthIdByUserId(Integer userId) {
         return baseMapper.listUserAuthIdByUserId(userId);
     }
 
+    /**
+     * 分配权限
+     * @param assignAuthDTO
+     * @return
+     */
     @Override
     public boolean assignAuth(AssignAuthDTO assignAuthDTO) {
+        // 根本是修改角色的权限. 如果多角色? 相应角色下列表权限全删,重新添加最方便.
         Integer userId = assignAuthDTO.getUserId();
         List<Integer> authIds = assignAuthDTO.getAuthIds();
+        boolean flag = roleAuthService.delByUserId(userId);
+        // 如果是空 删完就结束
+        if (CollectionUtils.isEmpty(authIds)){
+            return flag;
+        }
+        // 不是空,遍历,给拥有的每个角色添加相应权限.
         List<Integer> userRoleIdList = userService.listUserRole(userId).stream().map(Role::getRoleId).collect(Collectors.toList());
         List<RoleAuth> roleAuths = new ArrayList<>();
-        // 先直接插入看看结果,如果重复的话再做处理.
         for (Integer roleId : userRoleIdList) {
             for (Integer authId:authIds){
                 roleAuths.add(new RoleAuth(roleId,authId));
