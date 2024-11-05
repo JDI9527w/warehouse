@@ -200,7 +200,6 @@ public class UserController {
         return Result.ok(userAuthIdList);
     }
 
-    // TODO 测试
     @PutMapping("/user/auth-grant")
     public Result authGrant(@RequestBody AssignAuthDTO assignAuthDTO){
         boolean flag = authService.assignAuth(assignAuthDTO);

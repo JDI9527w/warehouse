@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.learn.DTO.AssignRoleAuthDTO;
 import com.learn.DTO.Result;
 import com.learn.entity.Role;
+import com.learn.service.RoleAuthService;
 import com.learn.service.RoleService;
 import com.learn.util.WarehouseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class RoleController {
     private StringRedisTemplate redisTemplate;
 
     @Autowired
+    private RoleAuthService roleAuthService;
+
+    @Autowired
     private RoleService roleService;
 
     @GetMapping("/role/role-list")
@@ -35,7 +40,6 @@ public class RoleController {
             roleList = roleService.listRole(queryWrapper);
             String jsonRoleList = JSON.toJSONString(roleList);
             redisTemplate.opsForValue().set("role:list", jsonRoleList);
-            // TODO 角色表更新时,及时删除redis.
             return Result.ok(roleList);
         }
         roleList = JSON.parseArray(stringRoleList, Role.class);
@@ -44,6 +48,7 @@ public class RoleController {
 
     /**
      * 角色分页查询
+     *
      * @param role
      * @param pageSize
      * @param pageNum
@@ -72,6 +77,7 @@ public class RoleController {
 
     /**
      * 添加角色
+     *
      * @param role
      * @return
      */
@@ -93,6 +99,7 @@ public class RoleController {
 
     /**
      * 修改角色
+     *
      * @param role
      * @return
      */
@@ -107,7 +114,8 @@ public class RoleController {
     }
 
     /**
-     *删除角色
+     * 删除角色
+     *
      * @param roleId
      * @return
      */
@@ -123,18 +131,40 @@ public class RoleController {
 
     /**
      * 修改角色状态,如果角色禁用,则赋予了此角色的用户无法使用该角色的权限.
+     *
      * @param role
      * @return
      */
     @PutMapping("/role/role-state-update")
-    public Result updateRoleState(@RequestBody Role role){
+    public Result updateRoleState(@RequestBody Role role) {
         boolean flag = roleService.updateById(role);
         if (flag) {
             redisTemplate.delete("role:list");
             Set<String> keys = redisTemplate.keys("authTree*");
-            if (CollectionUtils.isNotEmpty(keys)){
+            if (CollectionUtils.isNotEmpty(keys)) {
                 redisTemplate.delete(keys);
             }
+            return Result.ok("操作成功");
+        }
+        return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    /**
+     * 获取角色对应的权限id
+     *
+     * @param roleId
+     * @return
+     */
+    @GetMapping("/role/role-auth")
+    public Result roleAuthByRoleId(Integer roleId) {
+        List<Integer> list = roleAuthService.listAuthIdByRoleId(roleId);
+        return Result.ok(list);
+    }
+
+    @PutMapping("/role/auth-grant")
+    public Result authGrant(@RequestBody AssignRoleAuthDTO araDTO) {
+        boolean flag = roleService.authGrantByRoleId(araDTO);
+        if (flag) {
             return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");

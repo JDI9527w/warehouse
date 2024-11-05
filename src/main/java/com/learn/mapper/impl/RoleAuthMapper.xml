@@ -9,4 +9,10 @@
     WHERE ur.user_id = #{userId}
     AND ai.auth_type != 3;
     </delete>
+    <select id="listAuthIdByRoleId" resultType="java.lang.Integer">
+        select ra.auth_id
+        from role_auth ra
+        inner join auth_info ai on ra.auth_id = ai.auth_id
+        where ra.role_id = #{roleId} and ai.auth_type != 3
+    </select>
 </mapper>

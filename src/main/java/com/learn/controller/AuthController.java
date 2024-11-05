@@ -19,5 +19,4 @@ public class AuthController {
         List<Auth> treeAuthList = authService.listAuthTree();
         return Result.ok(treeAuthList);
     }
-    // TODO 修改权限为修改用户拥有角色的权限，如果有多个角色，则每个角色都添加/删除响应的权限。
 }
