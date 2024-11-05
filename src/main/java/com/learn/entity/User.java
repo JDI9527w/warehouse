@@ -23,11 +23,11 @@ public class User implements Serializable {
     @TableLogic
     private Integer isDelete;
     @TableField(fill = FieldFill.INSERT)
-    private String createBy;
+    private Integer createBy;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.UPDATE)
-    private String updateBy;
+    private Integer updateBy;
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

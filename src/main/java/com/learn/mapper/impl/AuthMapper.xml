@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.learn.mapper.AuthMapper">
+    <delete id="deleteAuthChildByAuthId">
+        WITH RECURSIVE cte AS (
+            -- 基础查询：查找具有特定parent_id的记录
+            SELECT auth_id
+            FROM auth_info
+            WHERE parent_id = #{authId}
+
+            UNION ALL
+
+            -- 递归查询：查找所有子记录
+            SELECT ai.auth_id
+            FROM auth_info ai
+            INNER JOIN cte ON ai.parent_id = cte.auth_id
+        )
+        DELETE FROM auth_info
+        WHERE auth_id IN (SELECT auth_id FROM cte);
+    </delete>
     <select id="listUserAuthByUserId" resultType="com.learn.entity.Auth">
         select
             ai.auth_id,

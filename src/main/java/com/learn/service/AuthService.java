@@ -14,4 +14,8 @@ public interface AuthService extends IService<Auth> {
     List<Integer> listUserAuthIdByUserId(Integer userId);
 
     boolean assignAuth(AssignAuthDTO assignAuthDTO);
+
+    boolean deleteAuthChildByAuthId(Integer authId);
+
+    boolean deleteAuthByAuthId(Integer authId);
 }

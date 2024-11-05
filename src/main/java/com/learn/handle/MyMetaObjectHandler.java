@@ -25,7 +25,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("公共字段自动填充[insert]...");
         try {
             CurrentUser currentUser = tokenUser();
-            this.strictInsertFill(metaObject, "createBy", String.class, String.valueOf(currentUser.getUserId())); // 创建人
+            this.strictInsertFill(metaObject, "createBy", Integer.class, currentUser.getUserId()); // 创建人
             this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 创建时间
             log.info("公共字段自动填充[insert]...param: {}", metaObject);
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         try {
             CurrentUser currentUser = tokenUser();
             // 修改人
-            this.strictUpdateFill(metaObject, "updateBy", String.class, String.valueOf(currentUser.getUserId()));
+            this.strictUpdateFill(metaObject, "updateBy", Integer.class, currentUser.getUserId());
             // 修改时间
             this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         } catch (Exception e) {

@@ -33,14 +33,14 @@ public class Role implements Serializable {
     private Integer roleState;
     //创建角色的用户id
     @TableField(fill = FieldFill.INSERT)
-    private String createBy;
+    private Integer createBy;
     //创建时间
     //json转换的日期格式
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     //修改角色的用户id
     @TableField(fill = FieldFill.UPDATE)
-    private String updateBy;
+    private Integer updateBy;
     //修改时间
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;

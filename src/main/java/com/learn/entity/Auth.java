@@ -1,13 +1,15 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,6 +21,7 @@ import java.util.List;
 @TableName("auth_info")
 public class Auth implements Serializable {
 
+	@TableId
 	private int authId;//权限(菜单)id
 
 	private int parentId;//父权限(菜单)id
@@ -37,15 +40,16 @@ public class Auth implements Serializable {
 
 	private int authOrder;//权限(菜单)的优先级
 
-	private String authState;//权限(菜单)状态(1.启用,0.禁用)
+	private Integer authState;//权限(菜单)状态(1.启用,0.禁用)
 
-	private int createBy;//创建权限(菜单)的用户id
-
-	private Date createTime;//权限(菜单)的创建时间
-
-	private int updateBy;//修改权限(菜单)的用户id
-
-	private Date updateTime;//权限(菜单)的修改时间
+	@TableField(fill = FieldFill.INSERT)
+	private Integer createBy;//创建权限(菜单)的用户id
+	@TableField(fill = FieldFill.INSERT)
+	private LocalDateTime createTime;//权限(菜单)的创建时间
+	@TableField(fill = FieldFill.UPDATE)
+	private Integer updateBy;//修改权限(菜单)的用户id
+	@TableField(fill = FieldFill.UPDATE)
+	private LocalDateTime updateTime;//权限(菜单)的修改时间
 
 	//追加的List<Auth>集合属性 -- 用于存储当前权限(菜单)的子级权限(菜单)
 	@TableField(exist = false)

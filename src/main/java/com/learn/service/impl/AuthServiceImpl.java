@@ -17,6 +17,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -54,7 +55,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     public List<Auth> listAuthTree() {
         QueryWrapper<Auth> wq = new QueryWrapper<>();
         wq.ne("auth_type",3);
-        wq.eq("auth_state", 1);
+//        wq.eq("auth_state", 1);
         List<Auth> authList = baseMapper.selectList(wq);
         return treeAuth(authList);
     }
@@ -88,6 +89,20 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
             }
         }
         return roleAuthService.saveBatch(roleAuths);
+    }
+
+    @Override
+    public boolean deleteAuthChildByAuthId(Integer authId) {
+        return baseMapper.deleteAuthChildByAuthId(authId);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteAuthByAuthId(Integer authId) {
+        this.deleteAuthChildByAuthId(authId);
+        boolean flag = this.removeById(authId);
+        redisTemplate.delete("com.learn.service.impl.AuthServiceImpl::all:authTree");
+        return flag;
     }
 
     /**

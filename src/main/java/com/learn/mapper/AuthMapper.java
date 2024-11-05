@@ -11,4 +11,6 @@ public interface AuthMapper extends BaseMapper<Auth> {
     List<Auth> listUserAuthByUserId(int userId);
 
     List<Integer> listUserAuthIdByUserId(int userId);
+
+    boolean deleteAuthChildByAuthId(Integer authId);
 }
