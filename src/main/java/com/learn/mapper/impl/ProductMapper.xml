@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.mapper.ProductMapper">
+
+    <select id="PageProductList" resultType="com.learn.DTO.ProductDTO">
+        select
+               pd.*,
+               b.brand_name,
+               pt.type_name,
+               s.supply_name,
+               p.place_name,
+               u.unit_name,
+               st.store_name,
+               (case
+                when supp_date &gt; now() then 0
+                else 1
+                end) as isOverDate
+        from product pd
+        inner join brand b on b.brand_id = pd.brand_id
+        inner join product_type pt on pt.type_id = pd.type_id
+        inner join supply s on s.supply_id = pd.supply_id
+        inner join place p on p.place_id = pd.place_id
+        inner join unit u on u.unit_id = pd.unit_id
+        inner join store st on st.store_id = pd.store_id
+        <where>
+            <if test="productDTO != null and productDTO != ''">
+                <if test="productDTO.storeId != null and productDTO.storeId != ''">
+                    pd.store_id = #{productDTO.storeId}
+                </if>
+                <if test="productDTO.productName != null and productDTO.productName != ''">
+                    pd.product_name = #{productDTO.productName}
+                </if>
+                <if test="productDTO.brandName != null and productDTO.brandName != ''">
+                    b.brand_name = #{productDTO.brandName}
+                </if>
+                <if test="productDTO.typeName != null and productDTO.typeName != ''">
+                    pt.type_name = #{productDTO.typeName}
+                </if>
+                <if test="productDTO.supplyName != null and productDTO.supplyName != ''">
+                    s.supply_name = #{productDTO.supplyName}
+                </if>
+                <if test="productDTO.placeName != null and productDTO.placeName != ''">
+                    p.place_name = #{productDTO.placeName}
+                </if>
+                <if test="productDTO.upDownState != null and productDTO.upDownState != ''">
+                    pd.up_down_state = #{productDTO.upDownState}
+                </if>
+                <if test="productDTO.isOverDate != null and productDTO.isOverDate != ''">
+                    pd.up_down_state = #{productDTO.upDownState}
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

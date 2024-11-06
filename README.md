@@ -15,4 +15,21 @@
 
     使用自带的UpdateById方法时，需要在实体类中使用@TableId标注出主键Id，
     否则会报：Invalid bound statement (not found) 错误。
-
+  三.一、递归删除.
+        
+    mysql8.0以上支持CTE(公用表表达式),递归删除可以使用:
+    -- 假设表名为`your_table`，包含`id`和`parent_id`字段
+    WITH RECURSIVE cte AS (  
+    -- 基础查询：查找具有特定parent_id的记录  
+    SELECT id  
+    FROM your_table  
+    WHERE parent_id = ? -- 这里的问号应替换为您要查找的父ID
+    UNION ALL
+    -- 递归查询：查找所有子记录  
+    SELECT yt.id  
+    FROM your_table yt  
+    INNER JOIN cte ON yt.parent_id = cte.id  
+    )  
+    -- 执行删除操作（注意：此操作应在事务中执行，以便在出现问题时能够回滚）  
+    DELETE FROM your_table  
+    WHERE id IN (SELECT id FROM cte);
