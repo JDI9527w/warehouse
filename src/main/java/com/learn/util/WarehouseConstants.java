@@ -21,6 +21,10 @@ public interface WarehouseConstants {
     // 启用
     public Integer STATE_ENABLED = 1;
 
+    //商品下架
+    public String PRODUCT_DOWN_STATE = "0";
+    // 商品上架
+    public String PRODUCT_UP_STATE = "1";
     //传递token的请求头名称
     public String HEADER_TOKEN_NAME = "Token";
 }

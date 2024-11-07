@@ -29,7 +29,9 @@ public class LoginFilter implements Filter {
         List<String> urlList = new ArrayList<>();
         urlList.add("/captcha/captchaImage");
         urlList.add("/login");
-        if (urlList.contains(servletPath)){
+        urlList.add("/product/img-upload");
+        String url = request.getServletPath();
+        if (urlList.contains(servletPath) || url.contains("/img/upload")){
             chain.doFilter(req,resp);
             return;
         }

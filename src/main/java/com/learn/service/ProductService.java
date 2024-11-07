@@ -10,4 +10,10 @@ import org.apache.ibatis.annotations.Param;
 public interface ProductService extends IService<Product> {
     Page<ProductDTO> PageProductList(IPage<ProductDTO> page, @Param("productDTO")ProductDTO productDTO);
 
+    boolean saveByProduct(Product product);
+
+    boolean updateByEntity(Product product);
+
+    boolean deleteProductById(Integer productId);
+
 }

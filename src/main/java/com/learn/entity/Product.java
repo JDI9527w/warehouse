@@ -3,13 +3,13 @@ package com.learn.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -66,9 +66,7 @@ public class Product implements Serializable {
 
     private String imgs;//商品的图片地址
 
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime productDate;//商品的生产日期
+    private LocalDate productDate;//商品的生产日期
 
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime suppDate;//商品的保质期
+    private LocalDate suppDate;//商品的保质期
 }

@@ -57,7 +57,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/user-list")
-    public Result listUser(@RequestBody(required = false) User user,
+    public Result listUser(User user,
                            @RequestParam Integer pageSize,
                            @RequestParam Integer pageNum) {
         QueryWrapper<User> queryWrapper = new QueryWrapper();

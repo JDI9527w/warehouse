@@ -28,25 +28,25 @@
                     pd.store_id = #{productDTO.storeId}
                 </if>
                 <if test="productDTO.productName != null and productDTO.productName != ''">
-                    pd.product_name = #{productDTO.productName}
+                    and pd.product_name like concat(#{productDTO.productName},'%')
                 </if>
                 <if test="productDTO.brandName != null and productDTO.brandName != ''">
-                    b.brand_name = #{productDTO.brandName}
+                    and b.brand_name = #{productDTO.brandName}
                 </if>
                 <if test="productDTO.typeName != null and productDTO.typeName != ''">
-                    pt.type_name = #{productDTO.typeName}
+                    and pt.type_name = #{productDTO.typeName}
                 </if>
                 <if test="productDTO.supplyName != null and productDTO.supplyName != ''">
-                    s.supply_name = #{productDTO.supplyName}
+                    and s.supply_name = #{productDTO.supplyName}
                 </if>
                 <if test="productDTO.placeName != null and productDTO.placeName != ''">
-                    p.place_name = #{productDTO.placeName}
+                    and p.place_name = #{productDTO.placeName}
                 </if>
                 <if test="productDTO.upDownState != null and productDTO.upDownState != ''">
-                    pd.up_down_state = #{productDTO.upDownState}
+                    and pd.up_down_state = #{productDTO.upDownState}
                 </if>
                 <if test="productDTO.isOverDate != null and productDTO.isOverDate != ''">
-                    pd.up_down_state = #{productDTO.upDownState}
+                    and pd.up_down_state = #{productDTO.upDownState}
                 </if>
             </if>
         </where>

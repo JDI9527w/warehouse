@@ -55,7 +55,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/role/role-page-list")
-    public Result rolePage(@RequestBody(required = false) Role role,
+    public Result rolePage(Role role,
                            @RequestParam Integer pageSize,
                            @RequestParam Integer pageNum) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();

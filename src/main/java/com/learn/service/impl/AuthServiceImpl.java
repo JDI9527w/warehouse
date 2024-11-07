@@ -12,6 +12,7 @@ import com.learn.mapper.AuthMapper;
 import com.learn.service.AuthService;
 import com.learn.service.RoleAuthService;
 import com.learn.service.UserService;
+import com.learn.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -57,7 +58,8 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
         wq.ne("auth_type",3);
 //        wq.eq("auth_state", 1);
         List<Auth> authList = baseMapper.selectList(wq);
-        return treeAuth(authList);
+//        return treeAuth(authList);
+        return TreeUtil.makeTree(authList, auth -> auth.getAuthId() == 0, (a, b) -> a.getAuthId() == b.getParentId(), Auth::setChildAuth);
     }
 
     @Override
