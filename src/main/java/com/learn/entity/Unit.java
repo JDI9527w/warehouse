@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @ToString
 public class Unit implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer unitId;//单位id
 
     private String unitName;//单位

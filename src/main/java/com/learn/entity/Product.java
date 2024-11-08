@@ -1,6 +1,7 @@
 package com.learn.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 @ToString
 public class Product implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer productId;//商品id
 
     private Integer storeId;//商品所在仓库id

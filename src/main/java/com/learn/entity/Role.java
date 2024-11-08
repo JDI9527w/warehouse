@@ -1,6 +1,7 @@
 package com.learn.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 public class Role implements Serializable {
 
     //角色id
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer roleId;
     //角色名称
     private String roleName;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.mapper.PurchaseMapper">
+    <select id="pageListPurchase" resultType="com.learn.DTO.PurchaseDTO">
+        select
+               bl.*,
+               pr.product_name,
+               st.store_name
+        from buy_list bl
+        inner join product pr on bl.product_id = pr.product_id
+        inner join store st on bl.store_id = st.store_id
+        <where>
+            <if test="purchaseDTO != null and purchaseDTO != ''">
+                <if test="purchaseDTO.productName != null and purchaseDTO.productName != ''">
+                    pr.product_name like concat(#{purchaseDTO.productName},'%')
+                </if>
+                <if test="purchaseDTO.storeId != null and purchaseDTO.storeId != ''">
+                    and st.store_id = #{purchaseDTO.storeId}
+                </if>
+                <if test="purchaseDTO.buyUser != null and purchaseDTO.buyUser != ''">
+                    and bl.buy_user = #{purchaseDTO.buyUser}
+                </if>
+                <if test="purchaseDTO.isIn != null and purchaseDTO.isIn != ''">
+                    and bl.is_in = #{purchaseDTO.isIn}
+                </if>
+                <if test="purchaseDTO.startTime != null and purchaseDTO.startTime != ''">
+                    and bl.buy_time &gt; #{purchaseDTO.startTime}
+                </if>
+                <if test="purchaseDTO.endTime != null and purchaseDTO.endTime != ''">
+                    and bl.buy_time &lt; #{purchaseDTO.startTime}
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

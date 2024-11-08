@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 @ToString
 public class ProductType implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer typeId;//分类id
 
     private Integer parentId;//上级分类id

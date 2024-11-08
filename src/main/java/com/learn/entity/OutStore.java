@@ -1,6 +1,7 @@
 package com.learn.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.Date;
 @ToString
 public class OutStore {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer outsId;//出库单id
 
     private Integer productId;//出库单出库的商品id

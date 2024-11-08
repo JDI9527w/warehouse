@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @TableName("user_role")
 public class UserRole implements Serializable {
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer userRoleId;
     private Integer roleId;
     private Integer userId;

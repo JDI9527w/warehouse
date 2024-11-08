@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @ToString
 public class Place implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer placeId;//产地id
 
     private String placeName;//产地名称

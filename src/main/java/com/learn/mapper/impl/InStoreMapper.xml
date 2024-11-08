@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.mapper.InStoreMapper">
+    <select id="queryInstorePageList" resultType="com.learn.DTO.InStoreDTO">
+        select
+               ist.*,
+               pr.product_name,
+               st.store_name,
+               ui.user_name as userCode,
+               pr.in_price
+        from in_store ist
+        inner join product pr on ist.product_id = pr.product_id
+        inner join store st on ist.store_id = st.store_id
+        inner join user_info ui on ist.create_by = ui.user_id
+        <where>
+            <if test="inStoreDTO != null and inStoreDTO != ''">
+                <if test="inStoreDTO.storeId!= null and inStoreDTO.storeId != ''">
+                    ist.store_id = #{inStoreDTO.storeId}
+                </if>
+                <if test="inStoreDTO.productName!= null and inStoreDTO.productName != ''">
+                    and pr.product_name like concat(#{inStoreDTO.productName},'%')
+                </if>
+                <if test="inStoreDTO.startTime!= null and inStoreDTO.startTime != ''">
+                    and ist.create_time &gt; #{inStoreDTO.startTime}
+                </if>
+                <if test="inStoreDTO.endTime!= null and inStoreDTO.endTime != ''">
+                    and ist.create_time &lt; #{ist.create_time}
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

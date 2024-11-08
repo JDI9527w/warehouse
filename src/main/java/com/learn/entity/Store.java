@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @ToString
 public class Store implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer storeId;//仓库id
 
     private String storeName;//仓库名称

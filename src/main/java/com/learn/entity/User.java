@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName("user_info")
 public class User implements Serializable {
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer userId;
     private String userCode;
     private String userName;
