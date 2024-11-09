@@ -46,7 +46,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         purchase.setBuyTime(new Date());
         int i = baseMapper.updateById(purchase);
         if (i == 1) {
-            Result.ok("操作成功");
+           return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
     }

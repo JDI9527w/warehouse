@@ -20,9 +20,9 @@ package com.learn.util;
      Integer STATE_DISABLED = 0;
     // 启用
      Integer STATE_ENABLED = 1;
-    // 未入库/未生成
+    // 未入库/未生成/未出库
      String STATE_IS_NOTIN = "0";
-    // 入库/生成入库单
+    // 入库/生成入库单/已出库
      String STATE_ISIN = "1";
     //商品下架
      String PRODUCT_DOWN_STATE = "0";
