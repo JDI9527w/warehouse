@@ -15,7 +15,6 @@ import com.learn.service.UserService;
 import com.learn.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,15 +50,14 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
         return auths;
     }
 
-    @Cacheable(key = "'all:authTree'")
+//    @Cacheable(key = "'all:authTree'")
     @Override
     public List<Auth> listAuthTree() {
         QueryWrapper<Auth> wq = new QueryWrapper<>();
         wq.ne("auth_type",3);
-//        wq.eq("auth_state", 1);
         List<Auth> authList = baseMapper.selectList(wq);
-//        return treeAuth(authList);
-        return TreeUtil.makeTree(authList, auth -> auth.getAuthId() == 0, (a, b) -> a.getAuthId() == b.getParentId(), Auth::setChildAuth);
+        List<Auth> authTree = TreeUtil.makeTree(authList, auth -> auth.getParentId() == 0, (a, b) -> a.getAuthId() == b.getParentId(), Auth::setChildAuth);
+        return authTree;
     }
 
     @Override

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.mapper.StatisticsVOMapper">
+    <select id="storeInvent" resultType="com.learn.vo.StatisticsVO">
+        select
+            st.store_id,
+            st.store_name,
+            IFNULL(sum(pr.product_invent),0) as totalInvent
+        from store st
+        inner join product pr on st.store_id = pr.store_id
+        group by st.store_id,st.store_name
+    </select>
+</mapper>

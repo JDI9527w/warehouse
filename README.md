@@ -1,6 +1,6 @@
 #项目笔记
 
-一、使用@CacheConfigure注解:
+一、使用缓存注解:
 
     启动类上标注@EnableCaching注解
     在使用缓存的类上标注@CacheConfig(cacheNames = "全限定类名")来指定缓存的键的前缀,一般是类的全路径).
