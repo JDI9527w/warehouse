@@ -174,14 +174,14 @@ public class ProductController {
     @PutMapping("/product-update")
     public Result updateProduct(@RequestBody Product product) {
         boolean flag = productService.updateByEntity(product);
-        if (flag){
+        if (flag) {
             return Result.ok();
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
     }
 
     @PutMapping("/state-change")
-    public Result changeState(@RequestBody Product product){
+    public Result changeState(@RequestBody Product product) {
         boolean b = productService.updateById(product);
         if (b) {
             return Result.ok("操作成功");
@@ -190,11 +190,16 @@ public class ProductController {
     }
 
     @DeleteMapping("/product-delete/{productId}")
-    public Result deleteProductById(@PathVariable Integer productId){
+    public Result deleteProductById(@PathVariable Integer productId) {
         boolean flag = productService.deleteProductById(productId);
         if (flag) {
             return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    @GetMapping("/exportTable")
+    public Result exportProductList(ProductDTO productDTO) {
+        return productService.listByParam(productDTO);
     }
 }

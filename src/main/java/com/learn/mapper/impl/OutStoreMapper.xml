@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.learn.mapper.OutStoreMapper">
-    <select id="pageOutStoreList" resultType="com.learn.DTO.OutStoreDTO">
-    select
+    <sql id="queryList">
+        select
         os.*,
         pr.product_name,
         st.store_name,
         ui.user_name as userCode
-    from out_store os
-    inner join product pr on os.product_id = pr.product_id
-    inner join store st on os.store_id = st.store_id
-    inner join user_info ui on os.tally_id = ui.user_id
-    <where>
-        <if test="outStoreDTO != null and outStoreDTO != ''">
-            <if test="outStoreDTO.storeId!= null and outStoreDTO.storeId != ''">
-                os.store_id = #{outStoreDTO.storeId}
+        from out_store os
+        inner join product pr on os.product_id = pr.product_id
+        inner join store st on os.store_id = st.store_id
+        inner join user_info ui on os.tally_id = ui.user_id
+        <where>
+            <if test="outStoreDTO != null and outStoreDTO != ''">
+                <if test="outStoreDTO.storeId!= null and outStoreDTO.storeId != ''">
+                    os.store_id = #{outStoreDTO.storeId}
+                </if>
+                <if test="outStoreDTO.productName!= null and outStoreDTO.productName != ''">
+                    and pr.product_name like concat(#{outStoreDTO.productName},'%')
+                </if>
+                <if test="outStoreDTO.startTime!= null and outStoreDTO.startTime != ''">
+                    and os.create_time &gt; #{outStoreDTO.startTime}
+                </if>
+                <if test="outStoreDTO.endTime!= null and outStoreDTO.endTime != ''">
+                    and os.create_time &lt; #{os.create_time}
+                </if>
+                <if test="outStoreDTO.isOut!= null and outStoreDTO.isOut != ''">
+                    and os.is_out = #{outStoreDTO.isOut}
+                </if>
             </if>
-            <if test="outStoreDTO.productName!= null and outStoreDTO.productName != ''">
-                and pr.product_name like concat(#{outStoreDTO.productName},'%')
-            </if>
-            <if test="outStoreDTO.startTime!= null and outStoreDTO.startTime != ''">
-                and os.create_time &gt; #{outStoreDTO.startTime}
-            </if>
-            <if test="outStoreDTO.endTime!= null and outStoreDTO.endTime != ''">
-                and os.create_time &lt; #{os.create_time}
-            </if>
-            <if test="outStoreDTO.isOut!= null and outStoreDTO.isOut != ''">
-                and os.is_out = #{outStoreDTO.isOut}
-            </if>
-        </if>
-    </where>
+        </where>
+    </sql>
+    <select id="pageOutStoreList" resultType="com.learn.DTO.OutStoreDTO">
+        <include refid="queryList"></include>
+    </select>
+    <select id="listByParam" resultType="com.learn.DTO.OutStoreDTO">
+        <include refid="queryList"></include>
     </select>
 </mapper>

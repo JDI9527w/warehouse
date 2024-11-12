@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.learn.mapper.InStoreMapper">
-    <select id="queryInstorePageList" resultType="com.learn.DTO.InStoreDTO">
+
+    <sql id="queryList">
         select
-               ist.*,
-               pr.product_name,
-               st.store_name,
-               ui.user_name as userCode,
-               pr.in_price
+        ist.*,
+        pr.product_name,
+        st.store_name,
+        ui.user_name as userCode,
+        pr.in_price
         from in_store ist
         inner join product pr on ist.product_id = pr.product_id
         inner join store st on ist.store_id = st.store_id
@@ -28,5 +29,11 @@
                 </if>
             </if>
         </where>
+    </sql>
+    <select id="queryInstorePageList" resultType="com.learn.DTO.InStoreDTO">
+        <include refid="queryList"></include>
+    </select>
+    <select id="listByParam" resultType="com.learn.DTO.InStoreDTO">
+        <include refid="queryList"></include>
     </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.learn.DTO.ProductDTO;
+import com.learn.DTO.Result;
 import com.learn.entity.Product;
 import com.learn.mapper.ProductMapper;
 import com.learn.service.ProductService;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
@@ -80,5 +82,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public Result listByParam(ProductDTO productDTO) {
+        List<ProductDTO> productList = baseMapper.listByParam(productDTO);
+        return Result.ok(productList);
     }
 }

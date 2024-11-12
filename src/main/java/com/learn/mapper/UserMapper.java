@@ -15,4 +15,6 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> listUsers(User user);
 
     List<Role> listUserRole(Integer userId);
+
+    List<User> listUserExport();
 }

@@ -8,7 +8,11 @@ import com.learn.entity.OutStore;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface OutStoreMapper extends BaseMapper<OutStore> {
     Page<OutStoreDTO> pageOutStoreList(@Param("outStoreDTO") OutStoreDTO outStoreDTO, IPage<OutStoreDTO> page);
+
+    List<OutStoreDTO> listByParam(@Param("outStoreDTO")OutStoreDTO outStoreDTO);
 }

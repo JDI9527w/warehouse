@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/role")
 public class RoleController {
 
     @Autowired
@@ -30,7 +31,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("/role/role-list")
+    @GetMapping("/role-list")
     public Result listRole() {
         List<Role> roleList;
         QueryWrapper<Role> queryWrapper = new QueryWrapper();
@@ -54,7 +55,7 @@ public class RoleController {
      * @param pageNum
      * @return
      */
-    @GetMapping("/role/role-page-list")
+    @GetMapping("/role-page-list")
     public Result rolePage(Role role,
                            @RequestParam Integer pageSize,
                            @RequestParam Integer pageNum) {
@@ -81,7 +82,7 @@ public class RoleController {
      * @param role
      * @return
      */
-    @PostMapping("/role/role-add")
+    @PostMapping("/role-add")
     public Result addRole(@RequestBody Role role) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>(role);
         Role one = roleService.getOne(queryWrapper);
@@ -103,7 +104,7 @@ public class RoleController {
      * @param role
      * @return
      */
-    @PutMapping("/role/role-update")
+    @PutMapping("/role-update")
     public Result updateRole(@RequestBody Role role) {
         boolean flag = roleService.updateById(role);
         if (flag) {
@@ -119,7 +120,7 @@ public class RoleController {
      * @param roleId
      * @return
      */
-    @DeleteMapping("/role/role-delete/{roleId}")
+    @DeleteMapping("/role-delete/{roleId}")
     public Result deleteRoleById(@PathVariable Integer roleId) {
         boolean flag = roleService.removeRoleById(roleId);
         if (flag) {
@@ -135,7 +136,7 @@ public class RoleController {
      * @param role
      * @return
      */
-    @PutMapping("/role/role-state-update")
+    @PutMapping("/role-state-update")
     public Result updateRoleState(@RequestBody Role role) {
         boolean flag = roleService.updateById(role);
         if (flag) {
@@ -155,18 +156,23 @@ public class RoleController {
      * @param roleId
      * @return
      */
-    @GetMapping("/role/role-auth")
+    @GetMapping("/role-auth")
     public Result roleAuthByRoleId(Integer roleId) {
         List<Integer> list = roleAuthService.listAuthIdByRoleId(roleId);
         return Result.ok(list);
     }
 
-    @PutMapping("/role/auth-grant")
+    @PutMapping("/auth-grant")
     public Result authGrant(@RequestBody AssignRoleAuthDTO araDTO) {
         boolean flag = roleService.authGrantByRoleId(araDTO);
         if (flag) {
             return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    @GetMapping("/exportTable")
+    public Result exportRoleList() {
+        return Result.ok(roleService.list());
     }
 }

@@ -13,4 +13,6 @@ public interface PurchaseService extends IService<Purchase> {
     Result updatePurchase(Purchase purchase);
 
     Result createInStore(Purchase purchase);
+
+    Result listByParam(PurchaseDTO purchaseDTO);
 }

@@ -85,4 +85,9 @@ public class OutStoreServiceImpl extends ServiceImpl<OutStoreMapper, OutStore> i
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
     }
+
+    @Override
+    public Result listByParam(OutStoreDTO outStoreDTO) {
+        return Result.ok(baseMapper.listByParam(outStoreDTO));
+    }
 }

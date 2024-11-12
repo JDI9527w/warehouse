@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.learn.DTO.ProductDTO;
+import com.learn.DTO.Result;
 import com.learn.entity.Product;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,5 @@ public interface ProductService extends IService<Product> {
 
     boolean deleteProductById(Integer productId);
 
+    Result listByParam(@Param("productDTO") ProductDTO productDTO);
 }

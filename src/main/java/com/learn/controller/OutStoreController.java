@@ -42,4 +42,9 @@ public class OutStoreController {
     public Result confirmOutStore(@RequestBody OutStore outStore) {
         return outStoreService.confirmOutStore(outStore);
     }
+
+    @GetMapping("/exportTable")
+    public Result exportRoleList(OutStoreDTO outStoreDTO) {
+        return outStoreService.listByParam(outStoreDTO);
+    }
 }

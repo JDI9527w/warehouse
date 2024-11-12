@@ -12,4 +12,6 @@ public interface OutStoreService extends IService<OutStore> {
     Result addOutStore(OutStore outStore);
 
     Result confirmOutStore(OutStore outStore);
+
+    Result listByParam(OutStoreDTO outStoreDTO);
 }

@@ -9,7 +9,11 @@ import com.learn.entity.Purchase;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface PurchaseMapper extends BaseMapper<Purchase> {
     Page<ProductDTO> pageListPurchase(@Param("purchaseDTO")PurchaseDTO purchaseDTO, IPage<Purchase> page);
+
+    List<PurchaseDTO> listByParam(@Param("purchaseDTO")PurchaseDTO purchaseDTO);
 }

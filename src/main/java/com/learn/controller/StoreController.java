@@ -62,17 +62,15 @@ public class StoreController {
 
     @PutMapping("/store-update")
     public Result updateStore(@RequestBody Store store) {
-        /*QueryWrapper<Store> qw = new QueryWrapper<>();
-        qw.eq("store_num", store.getStoreNum());
-        qw.ne("store_id", store.getStoreId());
-        Store exist = storeService.getOne(qw);
-        if (exist != null) {
-            return Result.err(Result.CODE_ERR_BUSINESS, "操作失败,编码重复");
-        }*/
         boolean flag = storeService.updateById(store);
         if (flag) {
             return Result.ok("操作成功");
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败");
+    }
+
+    @GetMapping("/exportTable")
+    public Result exportRoleList(Store store) {
+        return storeService.listByParam(store);
     }
 }

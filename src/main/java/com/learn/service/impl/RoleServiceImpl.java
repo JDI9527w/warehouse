@@ -44,12 +44,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public boolean updateRoleState(Role role) {
-        // TODO: 干嘛用的?
-        return false;
-    }
-
-    @Override
     public boolean authGrantByRoleId(AssignRoleAuthDTO araDTO) {
         Integer roleId = araDTO.getRoleId();
         List<Integer> authIds = araDTO.getAuthIds();

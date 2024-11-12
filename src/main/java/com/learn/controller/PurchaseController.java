@@ -42,4 +42,9 @@ public class PurchaseController {
     public Result createInStore(@RequestBody Purchase purchase) {
         return purchaseService.createInStore(purchase);
     }
+
+    @GetMapping("/exportTable")
+    public Result exportRoleList(PurchaseDTO purchaseDTO) {
+        return purchaseService.listByParam(purchaseDTO);
+    }
 }

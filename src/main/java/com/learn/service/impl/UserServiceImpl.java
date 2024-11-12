@@ -2,12 +2,12 @@ package com.learn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.learn.DTO.Result;
 import com.learn.entity.Role;
 import com.learn.entity.User;
 import com.learn.mapper.UserMapper;
 import com.learn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +17,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private StringRedisTemplate redisTemplate;
 
     @Override
     public User getUserByCode(String userCode) {
@@ -44,5 +42,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     @Override
     public List<Role> listUserRole(Integer userId) {
         return baseMapper.listUserRole(userId);
+    }
+
+    @Override
+    public Result listUserExport() {
+        return Result.ok(baseMapper.listUserExport());
     }
 }

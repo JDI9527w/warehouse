@@ -24,7 +24,11 @@ public class InStoreController {
 
     @PutMapping("/instore-confirm")
     public Result instoreConfirm(@RequestBody InStoreDTO inStoreDTO) {
-        Result result = inStoreService.putInstore(inStoreDTO);
-        return result;
+        return inStoreService.putInstore(inStoreDTO);
+    }
+
+    @GetMapping("/exportTable")
+    public Result exportRoleList(InStoreDTO inStoreDTO) {
+        return inStoreService.listByParam(inStoreDTO);
     }
 }

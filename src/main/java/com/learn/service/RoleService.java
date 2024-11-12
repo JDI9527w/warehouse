@@ -25,13 +25,6 @@ public interface RoleService extends IService<Role> {
     boolean removeRoleById(Integer roleId);
 
     /**
-     * 更新角色状态
-     * @param role
-     * @return
-     */
-    boolean updateRoleState(Role role);
-
-    /**
      * 给角色分配权限
      * @param araDTO
      * @return

@@ -8,7 +8,11 @@ import com.learn.entity.InStore;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface InStoreMapper extends BaseMapper<InStore> {
     Page<InStoreDTO> queryInstorePageList(@Param("inStoreDTO") InStoreDTO inStoreDTO, IPage<InStoreDTO> page);
+
+    List<InStoreDTO> listByParam(@Param("inStoreDTO") InStoreDTO inStoreDTO);
 }

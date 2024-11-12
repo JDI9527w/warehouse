@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -41,7 +42,7 @@ public class UserController {
      * @param token
      * @return
      */
-    @GetMapping("/user/auth-list")
+    @GetMapping("/auth-list")
     public Result listUserAuth(@RequestHeader(WarehouseConstants.HEADER_TOKEN_NAME) String token) {
         CurrentUser currentUser = tokenUtils.getCurrentUser(token);
         List<Auth> auths = authService.listUserAuthById(currentUser.getUserId());
@@ -56,7 +57,7 @@ public class UserController {
      * @param pageNum
      * @return
      */
-    @GetMapping("/user/user-list")
+    @GetMapping("/user-list")
     public Result listUser(User user,
                            @RequestParam Integer pageSize,
                            @RequestParam Integer pageNum) {
@@ -83,7 +84,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping("user/addUser")
+    @PostMapping("/addUser")
     public Result addUser(@RequestBody User user) {
         String parsePwd = DigestUtil.hmacSign(user.getUserPwd());
         user.setUserState(WarehouseConstants.USER_STATE_NOT_PASS);
@@ -102,7 +103,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PutMapping("/user/updateUser")
+    @PutMapping("/updateUser")
     public Result updateUser(@RequestBody User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", user.getUserId());
@@ -119,7 +120,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @DeleteMapping("/user/deleteUser/{userId}")
+    @DeleteMapping("/deleteUser/{userId}")
     public Result deleteUserById(@PathVariable Integer userId) {
         boolean removeFlag = userService.remove(new QueryWrapper<User>().eq("user_id", userId));
         if (removeFlag) {
@@ -134,7 +135,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PutMapping("/user/updateState")
+    @PutMapping("/updateState")
     public Result updateState(@RequestBody User user) {
         boolean updateFlag = userService.updateById(user);
         if (updateFlag) {
@@ -149,7 +150,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @GetMapping("/user/user-role-list/{userId}")
+    @GetMapping("/user-role-list/{userId}")
     public Result userRoleList(@PathVariable Integer userId) {
         List<Role> roles = userService.listUserRole(userId);
         return Result.ok(roles);
@@ -161,7 +162,7 @@ public class UserController {
      * @param assignRoleDto
      * @return
      */
-    @PutMapping("/user/assignRole")
+    @PutMapping("/assignRole")
     public Result assignRoleByUserId(@RequestBody AssignRoleDto assignRoleDto) {
         boolean flag = userRoleService.assignRoleByUserId(assignRoleDto);
         if (flag) {
@@ -176,7 +177,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PutMapping("/user/updatePwd/{userId}")
+    @PutMapping("/updatePwd/{userId}")
     public Result resetPwdById(@PathVariable Integer userId) {
         UpdateWrapper<User> uw = new UpdateWrapper<>();
         uw.eq("user_id", userId);
@@ -194,18 +195,23 @@ public class UserController {
      * @param userId
      * @return
      */
-    @GetMapping("/user/user-auth")
+    @GetMapping("/user-auth")
     public Result userAuth(Integer userId) {
         List<Integer> userAuthIdList = authService.listUserAuthIdByUserId(userId);
         return Result.ok(userAuthIdList);
     }
 
-    @PutMapping("/user/auth-grant")
+    @PutMapping("/auth-grant")
     public Result authGrant(@RequestBody AssignAuthDTO assignAuthDTO){
         boolean flag = authService.assignAuth(assignAuthDTO);
         if (flag) {
             return Result.ok("操作成功");
         }
         return  Result.err(Result.CODE_ERR_SYS,"操作失败");
+    }
+
+    @GetMapping("/exportTable")
+    public Result exportUserList() {
+        return userService.listUserExport();
     }
 }

@@ -47,4 +47,9 @@ public class InStoreServiceImpl extends ServiceImpl<InStoreMapper, InStore> impl
         }
         return Result.err(Result.CODE_ERR_SYS, "操作失败,系统错误");
     }
+
+    @Override
+    public Result listByParam(InStoreDTO inStoreDTO) {
+        return Result.ok(baseMapper.listByParam(inStoreDTO));
+    }
 }

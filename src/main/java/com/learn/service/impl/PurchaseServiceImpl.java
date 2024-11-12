@@ -72,4 +72,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         }
         return Result.err(Result.CODE_ERR_SYS,"操作失败");
     }
+
+    @Override
+    public Result listByParam(PurchaseDTO purchaseDTO) {
+        return Result.ok(baseMapper.listByParam(purchaseDTO));
+    }
 }
