@@ -1,6 +1,6 @@
 package com.learn.filter;
 
-import com.alibaba.fastjson2.JSON;
+/*import com.alibaba.fastjson2.JSON;
 import com.learn.DTO.Result;
 import com.learn.util.WarehouseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +31,13 @@ public class LoginFilter implements Filter {
         urlList.add("/login");
         urlList.add("/product/img-upload");
         String url = request.getServletPath();
-        if (urlList.contains(servletPath) || url.contains("/img/upload")){
-            chain.doFilter(req,resp);
+        if (urlList.contains(servletPath) || url.contains("/img/upload")) {
+            chain.doFilter(req, resp);
             return;
         }
         String token = request.getHeader(WarehouseConstants.HEADER_TOKEN_NAME);
-        if (StringUtils.hasText(token) && redisTemplate.hasKey(token)){
-            chain.doFilter(req,resp);
+        if (StringUtils.hasText(token) && redisTemplate.hasKey(token)) {
+            chain.doFilter(req, resp);
             return;
         }
         Result err = Result.err(Result.CODE_ERR_UNLOGINED, "请登陆后再试.");
@@ -48,4 +48,4 @@ public class LoginFilter implements Filter {
         writer.flush();
         writer.close();
     }
-}
+}*/

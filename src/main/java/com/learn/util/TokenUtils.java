@@ -4,7 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.learn.DTO.CurrentUser;
+import com.learn.DTO.SysUser;
+import com.learn.entity.User;
 import com.learn.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,11 +41,11 @@ public class TokenUtils {
     //token中存放用户真实姓名对应的名字
     private static final String CLAIM_NAME_USERNAME = "CLAIM_NAME_USERNAME";
 
-    private String sign(CurrentUser currentUser,String securityKey){
+    private String sign(SysUser sysUser, String securityKey){
         String token = JWT.create()
-                .withClaim(CLAIM_NAME_USERID, currentUser.getUserId())
-                .withClaim(CLAIM_NAME_USERCODE, currentUser.getUserCode())
-                .withClaim(CLAIM_NAME_USERNAME, currentUser.getUserName())
+                .withClaim(CLAIM_NAME_USERID, sysUser.getUser().getUserId())
+                .withClaim(CLAIM_NAME_USERCODE, sysUser.getUser().getUserCode())
+                .withClaim(CLAIM_NAME_USERNAME, sysUser.getUser().getUserName())
                 .withIssuedAt(new Date())//发行时间
                 .withExpiresAt(new Date(System.currentTimeMillis() + expireTime *1000))//有效时间
                 .sign(Algorithm.HMAC256(securityKey));
@@ -54,9 +55,9 @@ public class TokenUtils {
     /**
      * 将当前用户信息以用户密码为密钥生成token的方法
      */
-    public String loginSign(CurrentUser currentUser, String password){
+    public String loginSign(SysUser sysUser, String password){
         //生成token
-        String token = sign(currentUser, password);
+        String token = sign(sysUser, password);
         //将token保存到redis中,并设置token在redis中的过期时间
         stringRedisTemplate.opsForValue().set(token, token, expireTime, TimeUnit.SECONDS);
         return token;
@@ -65,7 +66,7 @@ public class TokenUtils {
     /**
      * 从客户端归还的token中获取用户信息的方法
      */
-    public CurrentUser getCurrentUser(String token) {
+    public User getCurrentUser(String token) {
         if(StringUtils.isEmpty(token)){
             throw new BusinessException("令牌为空，请登录！");
         }
@@ -83,7 +84,7 @@ public class TokenUtils {
         if(StringUtils.isEmpty(userCode) || StringUtils.isEmpty(userName)){
             throw new BusinessException("令牌缺失用户信息，请登录！");
         }
-        return new CurrentUser(userId, userCode, userName);
+        return new User(userId, userCode, userName);
     }
 
 }

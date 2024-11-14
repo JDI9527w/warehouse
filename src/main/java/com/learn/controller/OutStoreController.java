@@ -2,10 +2,10 @@ package com.learn.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.learn.DTO.CurrentUser;
 import com.learn.DTO.OutStoreDTO;
 import com.learn.DTO.Result;
 import com.learn.entity.OutStore;
+import com.learn.entity.User;
 import com.learn.service.OutStoreService;
 import com.learn.util.TokenUtils;
 import com.learn.util.WarehouseConstants;
@@ -33,7 +33,7 @@ public class OutStoreController {
     @PostMapping("/outstore-add")
     public Result addOutStore(@RequestBody OutStore outStore, HttpServletRequest request) {
         String token = request.getHeader(WarehouseConstants.HEADER_TOKEN_NAME);
-        CurrentUser currentUser = tokenUtils.getCurrentUser(token);
+        User currentUser = tokenUtils.getCurrentUser(token);
         outStore.setTallyId(currentUser.getUserId());
         return outStoreService.addOutStore(outStore);
     }

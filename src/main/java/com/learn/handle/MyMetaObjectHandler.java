@@ -2,8 +2,8 @@ package com.learn.handle;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.learn.DTO.CurrentUser;
 import com.learn.DTO.RequestContext;
+import com.learn.entity.User;
 import com.learn.exception.ServiceException;
 import com.learn.util.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         log.info("公共字段自动填充[insert]...");
         try {
-            CurrentUser currentUser = tokenUser();
+            User currentUser = tokenUser();
             this.strictInsertFill(metaObject, "createBy", Integer.class, currentUser.getUserId()); // 创建人
             this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 创建时间
             log.info("公共字段自动填充[insert]...param: {}", metaObject);
@@ -37,7 +37,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         log.info("公共字段自动填充[update]...");
         try {
-            CurrentUser currentUser = tokenUser();
+            User currentUser = tokenUser();
             // 修改人
             this.strictUpdateFill(metaObject, "updateBy", Integer.class, currentUser.getUserId());
             // 修改时间
@@ -47,7 +47,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         }
     }
 
-    public CurrentUser tokenUser() {
+    public User tokenUser() {
         HttpServletRequest request = RequestContext.getRequest();
         String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)){

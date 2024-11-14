@@ -15,6 +15,7 @@ import com.learn.service.UserService;
 import com.learn.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +38,12 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     private RoleAuthService roleAuthService;
 
     @Override
-    public List<Auth> listUserAuthById(Integer userId) {
+    public List<Auth> treeUserAuthById(Integer userId) {
         String jsonString = redisTemplate.opsForValue().get("authTree:" + userId);
         List<Auth> auths;
         if (StringUtils.isEmpty(jsonString)) {
             auths = baseMapper.listUserAuthByUserId(userId);
-            auths = treeAuth(auths);
+            auths = TreeUtil.makeTree(auths, auth -> auth.getParentId() == 0, (a, b) -> a.getAuthId() == b.getParentId(), Auth::setChildAuth);
             redisTemplate.opsForValue().set("authTree:" + userId, JSON.toJSONString(auths), 60 * 60 * 8, TimeUnit.SECONDS);
             return auths;
         }
@@ -50,7 +51,12 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
         return auths;
     }
 
-//    @Cacheable(key = "'all:authTree'")
+    @Override
+    public List<Auth> listUserAuthById(Integer userId) {
+        return baseMapper.listUserAuthByUserId(userId);
+    }
+
+    @Cacheable(key = "'all:authTree'")
     @Override
     public List<Auth> listAuthTree() {
         QueryWrapper<Auth> wq = new QueryWrapper<>();

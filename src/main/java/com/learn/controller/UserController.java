@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.learn.DTO.AssignAuthDTO;
 import com.learn.DTO.AssignRoleDto;
-import com.learn.DTO.CurrentUser;
 import com.learn.DTO.Result;
 import com.learn.entity.Auth;
 import com.learn.entity.Role;
@@ -13,11 +12,11 @@ import com.learn.entity.User;
 import com.learn.service.AuthService;
 import com.learn.service.UserRoleService;
 import com.learn.service.UserService;
-import com.learn.util.DigestUtil;
 import com.learn.util.TokenUtils;
 import com.learn.util.WarehouseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +34,8 @@ public class UserController {
     private TokenUtils tokenUtils;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 获取用户权限
@@ -44,8 +45,8 @@ public class UserController {
      */
     @GetMapping("/auth-list")
     public Result listUserAuth(@RequestHeader(WarehouseConstants.HEADER_TOKEN_NAME) String token) {
-        CurrentUser currentUser = tokenUtils.getCurrentUser(token);
-        List<Auth> auths = authService.listUserAuthById(currentUser.getUserId());
+        User currentUser = tokenUtils.getCurrentUser(token);
+        List<Auth> auths = authService.treeUserAuthById(currentUser.getUserId());
         return Result.ok(auths);
     }
 
@@ -86,7 +87,7 @@ public class UserController {
      */
     @PostMapping("/addUser")
     public Result addUser(@RequestBody User user) {
-        String parsePwd = DigestUtil.hmacSign(user.getUserPwd());
+        String parsePwd = passwordEncoder.encode(user.getUserPwd());
         user.setUserState(WarehouseConstants.USER_STATE_NOT_PASS);
         user.setIsDelete(WarehouseConstants.LOGIC_NOT_DELETE_VALUE);
         user.setUserPwd(parsePwd);
@@ -181,7 +182,7 @@ public class UserController {
     public Result resetPwdById(@PathVariable Integer userId) {
         UpdateWrapper<User> uw = new UpdateWrapper<>();
         uw.eq("user_id", userId);
-        String parsePwd = DigestUtil.hmacSign("123456");
+        String parsePwd = passwordEncoder.encode("123456");
         uw.set("user_pwd", parsePwd);
         boolean update = userService.update(uw);
         if (update) {

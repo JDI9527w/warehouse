@@ -7,6 +7,8 @@ import com.learn.entity.Auth;
 import java.util.List;
 
 public interface AuthService extends IService<Auth> {
+    List<Auth> treeUserAuthById(Integer userId);
+
     List<Auth> listUserAuthById(Integer userId);
 
     List<Auth> listAuthTree();

@@ -30,4 +30,10 @@ public class User implements Serializable {
     private Integer updateBy;
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
+
+    public User(Integer userId, String userCode, String userName) {
+        this.userId = userId;
+        this.userCode = userCode;
+        this.userName = userName;
+    }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("auth_info")
-public class Auth implements Serializable {
+public class Auth implements GrantedAuthority,Serializable {
 
 	@TableId(type = IdType.AUTO)
 	private int authId;//权限(菜单)id
@@ -51,4 +52,9 @@ public class Auth implements Serializable {
 	//追加的List<Auth>集合属性 -- 用于存储当前权限(菜单)的子级权限(菜单)
 	@TableField(exist = false)
 	private List<Auth> childAuth;
+
+	@Override
+	public String getAuthority() {
+		return null;
+	}
 }

@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private AuthService authService;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @GetMapping("/auth/auth-tree")
+    @GetMapping("/auth-tree")
     public Result authTree() {
         List<Auth> treeAuthList = authService.listAuthTree();
         return Result.ok(treeAuthList);
     }
 
-    @GetMapping("/auth/name-check")
+    @GetMapping("/name-check")
     public Result checkAuthName(String authName) {
         QueryWrapper<Auth> qw = new QueryWrapper<>();
         qw.eq("auth_name", authName);
@@ -35,7 +36,7 @@ public class AuthController {
         return Result.ok();
     }
 
-    @PostMapping("/auth/auth-add")
+    @PostMapping("/auth-add")
     public Result addAuth(@RequestBody Auth auth) {
         auth.setAuthState(WarehouseConstants.STATE_DISABLED);
         auth.setAuthOrder(0);
@@ -47,7 +48,7 @@ public class AuthController {
         return Result.err(Result.CODE_ERR_BUSINESS, "操作失败");
     }
 
-    @GetMapping("/auth/url-check")
+    @GetMapping("/url-check")
     public Result checkAuthUrl(String url) {
         QueryWrapper<Auth> qw = new QueryWrapper<>();
         qw.eq("auth_url", url);
@@ -58,7 +59,7 @@ public class AuthController {
         return Result.ok("ok", "此url已经存在");
     }
 
-    @PutMapping("/auth/auth-enable/{authId}")
+    @PutMapping("/auth-enable/{authId}")
     public Result enableAuth(@PathVariable Integer authId) {
         Auth auth = authService.getById(authId);
         if (auth != null) {
@@ -70,7 +71,7 @@ public class AuthController {
         return Result.err(Result.CODE_ERR_BUSINESS, "没有与找到对应的权限");
     }
 
-    @PutMapping("/auth/auth-disable/{authId}")
+    @PutMapping("/auth-disable/{authId}")
     public Result disableAuth(@PathVariable Integer authId) {
         Auth auth = authService.getById(authId);
         if (auth != null) {
@@ -82,7 +83,7 @@ public class AuthController {
         return Result.err(Result.CODE_ERR_BUSINESS, "没有与找到对应的权限");
     }
 
-    @DeleteMapping("/auth/auth-delete/{authId}")
+    @DeleteMapping("/auth-delete/{authId}")
     public Result deleteAuthByAuthId(@PathVariable Integer authId) {
         boolean flag = authService.deleteAuthByAuthId(authId);
         if (flag) {

@@ -2,6 +2,7 @@ package com.learn.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.learn.DTO.LoginUser;
 import com.learn.DTO.Result;
 import com.learn.entity.Role;
 import com.learn.entity.User;
@@ -17,4 +18,6 @@ public interface UserService extends IService<User> {
     List<Role> listUserRole(Integer userId);
 
     Result listUserExport();
+
+    Result login(LoginUser loginUser);
 }
